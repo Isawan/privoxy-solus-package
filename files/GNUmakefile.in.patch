@@ -1,0 +1,101 @@
+880,911c880,914
+< 	@if [ "`$(ID) |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
+< 		if [ x$(USER) = x ] || [ $(USER) = root ]; then \
+< 			if [ x$(GROUP) = x ] || [ $(GROUP) = root ]; then \
+< 				if [ "`$(ID) privoxy`" ] && \
+< 					$(GROUPS) privoxy | $(SED) 's/^.*://' |$(GREP) "\<privoxy\>" >/dev/null; then \
+< 					$(ECHO) "Warning: Setting group owner to privoxy";\
+< 					GROUP_T=privoxy ;\
+< 				else \
+< 					$(ECHO)  "******************************************************************" ;\
+< 					$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
+< 					$(ECHO)  " It is strongly recommended to run $(PROGRAM) as a non-root user," ;\
+< 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
+< 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
+< 					$(ECHO)  "*******************************************************************" ;\
+< 					exit 1 ;\
+< 				fi ;\
+< 			else \
+< 				GROUP_T=$(GROUP) ;\
+< 			fi ;\
+< 			INSTALL_CONF="$(INSTALL_R) -g $$GROUP_T " ;\
+< 		else \
+< 			$(ECHO) "Superuser install, installing config files as $(USER):$(GROUP_T)" ;\
+< 			INSTALL_CONF="$(INSTALL_R) -o $(USER) -g $(GROUP_T)" ;\
+< 			GROUP_T=$(GROUP_T) ;\
+< 		fi ;\
+< 	else \
+< 		if [ ! "`id $(USER)`" = "`id`" ] ;then \
+< 			$(ECHO) "** WARNING ** current install user different from configured user!!" ;\
+< 			$(ECHO) "Edit may fail." ;\
+< 		fi ;\
+< 		INSTALL_CONF="$(INSTALL_R)" ;\
+< 	fi ;\
+---
+> #	@if [ "`$(ID) |sed 's/(.*//' |sed 's/.*=//'`" = "0" ] ;then\
+> #		if [ x$(USER) = x ] || [ $(USER) = root ]; then \
+> #			if [ x$(GROUP) = x ] || [ $(GROUP) = root ]; then \
+> #				if [ "`$(ID) privoxy`" ] && \
+> #					$(GROUPS) privoxy | $(SED) 's/^.*://' |$(GREP) "\<privoxy\>" >/dev/null; then \
+> #					$(ECHO) "Warning: Setting group owner to privoxy";\
+> #					GROUP_T=privoxy ;\
+> #				else \
+> #					$(ECHO)  "******************************************************************" ;\
+> #					$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
+> #					$(ECHO)  " It is strongly recommended to run $(PROGRAM) as a non-root user," ;\
+> #					$(ECHO)  " and to install the config files as that user and/or group!" ;\
+> #					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
+> #					$(ECHO)  "*******************************************************************" ;\
+> #					exit 1 ;\
+> #				fi ;\
+> #			else \
+> #				GROUP_T=$(GROUP) ;\
+> #			fi ;\
+> #			INSTALL_CONF="$(INSTALL_R) -g $$GROUP_T " ;\
+> #		else \
+> #			$(ECHO) "Superuser install, installing config files as $(USER):$(GROUP_T)" ;\
+> #			INSTALL_CONF="$(INSTALL_R) -o $(USER) -g $(GROUP_T)" ;\ #NOTE: SOLUS group here
+> #			GROUP_T=$(GROUP_T) ;\
+> #		fi ;\
+> #	else \
+> #		if [ ! "`id $(USER)`" = "`id`" ] ;then \
+> #			$(ECHO) "** WARNING ** current install user different from configured user!!" ;\
+> #			$(ECHO) "Edit may fail." ;\
+> #		fi ;\
+> #		INSTALL_CONF="$(INSTALL_R)" ;\
+> #	fi ;\
+> #
+> 	INSTALL_CONF="$(INSTALL_R)";\
+> 
+933,940c936,944
+< 	if [ x$$USER != x ]; then \
+< 		$(CHOWN) $$USER $(DESTDIR)$(LOG_DEST)/logfile || \
+< 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
+< 	fi ;\
+< 	if [ x$$GROUP_T != x ]; then \
+< 		$(CHGRP) $$GROUP_T $(DESTDIR)$(LOG_DEST)/logfile || \
+< 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
+< 	fi ;\
+---
+> 	#if [ x$$USER != x ]; then \
+> 	#	$(CHOWN) $$USER $(DESTDIR)$(LOG_DEST)/logfile || \
+> 	#	$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
+> 	#fi ;\
+> 	#if [ x$$GROUP_T != x ]; then \
+> 	#	$(CHGRP) $$GROUP_T $(DESTDIR)$(LOG_DEST)/logfile || \
+> 	#	$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
+> 	#fi ;\
+> 
+943,952c947
+< 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
+<                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
+<                $(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
+<                $(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
+<                $(SED) 's+%USER%+$(USER)+' | \
+<                $(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
+< 			$(INSTALL) $(INSTALL_P) slackware/rc.privoxy $(DESTDIR)/etc/rc.d/ ;\
+<                $(ECHO) "Installing for Slackware." ;\
+<                $(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
+< 		elif [ -d $(DESTDIR)/etc/init.d ] && [ -w $(DESTDIR)/etc/init.d ] ; then \
+---
+> 		if [ -d $(DESTDIR)/etc/init.d ] && [ -w $(DESTDIR)/etc/init.d ] ; then \
