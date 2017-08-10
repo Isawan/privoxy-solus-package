@@ -1,24 +1,27 @@
-name        : privoxy
-version     : 3.0.26
-release     : 1
-source      :
-        - https://www.privoxy.org/sf-download-mirror/Sources/3.0.26%20%28stable%29/privoxy-3.0.26-stable-src.tar.gz : 57e415b43ee5dfdca74685cc034053eaae962952fdabd086171551a86abf9cd8
-license     : GPL-2.0
-component   : network.util
-summary     : A non-caching web proxy with advanced filtering capabilities.
-description : |
-        Privoxy is a non-caching web proxy with advanced filtering capabilities
-        for enhancing privacy, modifying web page data and HTTP headers,
-        controlling access, and removing ads and other obnoxious Internet junk.
-setup       : |
-        %patch <$pkgfiles/Makefile.patch Makefile
-        %patch <$pkgfiles/GNUmakefile.in.patch GNUmakefile.in
-        autoheader
-        autoconf
-        %configure
-build       : |
-        %make
-install     : |
-        %make_install
-        install -D -m 00644 $pkgfiles/privoxy.sysusers $installdir/%libdir%/sysusers.d/privoxy.conf
-        
+name       : privoxy-3.0.26-stable
+version    : 3.0.26
+release    : 1
+source     :
+    - https://www.privoxy.org/sf-download-mirror/Sources/3.0.26%20%28stable%29/privoxy-3.0.26-stable-src.tar.gz : 57e415b43ee5dfdca74685cc034053eaae962952fdabd086171551a86abf9cd8
+license    : GPL-2.0 
+component  : network.util
+summary    : A non-caching web proxy with advanced filtering capabilities.
+description: |
+    Privoxy is a non-caching web proxy with advanced filtering capabilities
+    for enhancing privacy, modifying web page data and HTTP headers,
+    controlling access, and removing ads and other obnoxious Internet junk.
+    Privoxy has a flexible configuration and can be customized to suit
+    individual needs and tastes.
+    It has application for both stand-alone systems and multi-user networks.
+setup      : |
+    %patch <$pkgfiles/Makefile.patch Makefile
+    %patch <$pkgfiles/GNUmakefile.in.patch GNUmakefile.in
+    autoheader
+    autoconf
+    %configure
+build      : |
+    %make
+install    : |
+    %make_install
+    install -D -m 00644 $pkgfiles/privoxy.sysusers \
+    $installdir/%libdir%/sysusers.d/privoxy.conf
